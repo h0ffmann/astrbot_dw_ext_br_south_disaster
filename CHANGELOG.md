@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add the README in `zh-CN`, `pt-BR` and `ja-JP`.
+- Add the vendored `asd-ste100` skill for contributors.
+
 ## 0.1.0
 
 - First release in a separate repository.

@@ -45,8 +45,8 @@ jobs:
 
       - name: Complexity (radon, fail on rank C or worse)
         run: |
-          uvx radon@6.0.1 cc -s -a . -e 'tests/*'
-          if uvx radon@6.0.1 cc -n C . -e 'tests/*' | grep -q .; then
+          uvx radon@6.0.1 cc -s -a . -e 'tests/*,.claude/*'
+          if uvx radon@6.0.1 cc -n C . -e 'tests/*,.claude/*' | grep -q .; then
             echo "A function has complexity rank C or worse."
             exit 1
           fi
