@@ -27,7 +27,7 @@ ALERT_TIME_FMT = "%Y-%m-%d %H:%M:%S"
 FEED_TIME_FMT = "%d-%m-%Y %H:%M:%S UTC"  # The atualizado field, in UTC
 ACTIVE_STATUS = 1
 MAX_AGE_DAYS = 90  # Hard limit. An alert with an older last update is past, not active.
-GAUGE_TIME_FMT = "%d/%m/%y %H:%M"
+GAUGE_TIME_FMT = "%d/%m/%y %H:%M"  # The datahoraUltimovalor field, in UTC
 
 
 def _parse_time(text, fmt: str) -> datetime | None:
@@ -35,6 +35,15 @@ def _parse_time(text, fmt: str) -> datetime | None:
         return datetime.strptime(text, fmt).replace(tzinfo=BRT)
     except (TypeError, ValueError):  # strptime() needs str. Other types give TypeError.
         return None
+
+
+def _gauge_time(text) -> datetime | None:
+    """Return the time of a gauge reading in Brasília time. The feed sends UTC."""
+    try:
+        when = datetime.strptime(text, GAUGE_TIME_FMT)
+    except (TypeError, ValueError):
+        return None
+    return when.replace(tzinfo=timezone.utc).astimezone(BRT)
 
 
 def _feed_time(data: dict) -> datetime:
@@ -148,7 +157,7 @@ def _gauge_item(g: dict, thresholds: dict) -> dict | None:
         "level": level,
         "acc1hr": acc1,
         "acc24hr": acc24,
-        "observed_at": _parse_time(g.get("datahoraUltimovalor"), GAUGE_TIME_FMT),
+        "observed_at": _gauge_time(g.get("datahoraUltimovalor")),
     }
 
 
@@ -178,7 +187,7 @@ def parse_rain(
 
 
 def _newest_reading(gauges: list[dict]) -> datetime | None:
-    times = (_parse_time(g.get("datahoraUltimovalor"), GAUGE_TIME_FMT) for g in gauges)
+    times = (_gauge_time(g.get("datahoraUltimovalor")) for g in gauges)
     return max((t for t in times if t), default=None)
 
 

@@ -15,7 +15,11 @@ The `br_south_disaster` extension reads two public endpoints of CEMADEN. Both en
 
 3\. The rain endpoint sends JSON with the content type `text/html`. Do not use a JSON decoder that checks the content type. Read the body as text, then parse it.
 
-4\. All times are Brasília time (UTC-3, no daylight saving time). The only exception is the `atualizado` field of the alerts endpoint, which is in UTC.
+4\. The time zone is different for each field:
+
+- `atualizado` of the alerts endpoint is in UTC. The text of the field says this.
+- `datahoraUltimovalor` of the rain endpoint is in UTC. The extension changes it to Brasília time (UTC-3, no daylight saving time). The endpoint does not state the time zone. A check on 2026-10-31 at 04:32 UTC found 412 of 455 RS gauges in the last hour when read as UTC. Read as Brasília time, these gauges were 2 to 3 hours in the future. A small number of SC and PR gauges (11 of 656) had times up to 48 minutes in the future. Thus, do not use the newest reading of a list to find the current time.
+- `datahoracriacao` and `ult_atualizacao` of the alerts endpoint are treated as Brasília time. The data does not prove this. The extension shows these times with the label for Brasília time.
 
 5\. The text values `municipio`, `cidade`, `nivel` and `evento` are Portuguese. They are data. The extension does not translate them, but it uses some of them as keys.
 
@@ -182,7 +186,7 @@ Each array item is one rain gauge. A rain total is a number in millimeters (mm).
 | `cidade` | string | `"PAROBÉ"` | The name of the municipality. |
 | `nomeestacao` | string | `"G2-Laranjeiras"` | The name of the gauge. |
 | `ultimovalor` | number | `0` | The last reading of the gauge. |
-| `datahoraUltimovalor` | string | `"28/10/26 13:10"` | The time of the last reading, in Brasília time. The format is `dd/mm/yy HH:MM`. |
+| `datahoraUltimovalor` | string | `"28/10/26 13:10"` | The time of the last reading, in UTC. The format is `dd/mm/yy HH:MM`. |
 | `acc1hr` | number or string | `"-"` | The rain total of the last 1 hour. |
 | `acc3hr` | number or string | `"-"` | The rain total of the last 3 hours. |
 | `acc6hr` | number or string | `"-"` | The rain total of the last 6 hours. |

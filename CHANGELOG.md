@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fix the time of rain gauge messages. The feed sends UTC. The extension read it as Brasília time, so messages showed a time 3 hours too late.
 - A row with unexpected values no longer stops the other rows of a feed.
 - A changed feed now gives an error in the log. It no longer looks like an empty feed.
 - A bad `rain_thresholds` or interval value no longer stops the setup.
