@@ -7,6 +7,7 @@ import json
 import logging
 import math
 import types
+from datetime import datetime, timezone
 
 import pytest
 
@@ -184,6 +185,30 @@ def test_rain_state_starts_again_on_a_new_day(ext):
     assert state.escalations([item], "20261025") == [item]
     assert state.escalations([item], "20261025") == []
     assert state.escalations([item], "20261026") == [item]
+
+
+def test_gauge_time_is_utc_and_the_message_uses_brasilia_time(ext, make_api):
+    """Check that 03:30 in the feed is 03:30 UTC and that the message shows 00:30."""
+    api = make_api("en")
+    (item,) = ext.extension.parse_rain(
+        [gauge_row(datahoraUltimovalor="31/10/26 03:30")], uf="SC"
+    )
+    assert item["observed_at"] == datetime(2026, 10, 31, 3, 30, tzinfo=timezone.utc)
+    env = ext.extension.build_rain_envelope(api, item, "20261031", None)
+    assert env.event.metadata["issue_time"] == "2026-10-31T00:30:00-03:00"
+    context = types.SimpleNamespace(
+        title=env.event.title, headline=env.event.headline, metadata=env.event.metadata
+    )
+    text = ext.presenter.make_presenter(api).present(context)
+    assert "31/10/2026 00:30 (Brasília time)" in text
+
+
+def test_gauge_time_can_be_on_the_day_before_in_brasilia(ext):
+    """Check a reading just after midnight UTC."""
+    (item,) = ext.extension.parse_rain(
+        [gauge_row(datahoraUltimovalor="01/11/26 01:00")], uf="SC"
+    )
+    assert item["observed_at"].strftime("%d/%m %H:%M") == "31/10 22:00"
 
 
 # ------------------------------------------------------------- settings

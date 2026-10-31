@@ -208,6 +208,19 @@ def test_parse_alerts_live(ext, alerts_json):
         assert a["updated_at"] is not None, f"Unparsed ult_atualizacao: {a['raw']}"
 
 
+def test_gauge_times_are_utc(ext, rain_json):
+    """Check the time zone of the feed. A quarter of the gauges report in the last 2 hours.
+
+    The feed does not state its time zone. This test fails if the feed changes it.
+    """
+    now = datetime.now(timezone.utc)
+    times = sorted(
+        t for g in rain_json if (t := ext._gauge_time(g["datahoraUltimovalor"]))
+    )
+    recent = times[len(times) * 3 // 4]
+    assert now - timedelta(hours=2) <= recent <= now + timedelta(minutes=10)
+
+
 def test_parse_rain_live(ext, rain_json, uf):
     """Check parse_rain on each state: active gauges above a threshold only.
 
@@ -215,9 +228,7 @@ def test_parse_rain_live(ext, rain_json, uf):
     """
     out = ext.parse_rain(rain_json, uf=uf)
     newest = max(
-        t
-        for g in rain_json
-        if (t := ext._parse_time(g["datahoraUltimovalor"], ext.GAUGE_TIME_FMT))
+        t for g in rain_json if (t := ext._gauge_time(g["datahoraUltimovalor"]))
     )
     assert len({i["codibge"] for i in out}) == len(out)  # One gauge for each city
     for item in out:
@@ -232,9 +243,7 @@ def test_parse_rain_live(ext, rain_json, uf):
         g["codibge"]
         for g in rain_json
         if g["uf"] == uf
-        and ext._recent(
-            ext._parse_time(g["datahoraUltimovalor"], ext.GAUGE_TIME_FMT), newest
-        )
+        and ext._recent(ext._gauge_time(g["datahoraUltimovalor"]), newest)
         and any(
             (_is_number(g["acc1hr"]) and g["acc1hr"] >= t1)
             or (_is_number(g["acc24hr"]) and g["acc24hr"] >= t24)

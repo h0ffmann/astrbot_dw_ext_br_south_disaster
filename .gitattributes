@@ -8,6 +8,8 @@ docs/** export-ignore
 .github/** export-ignore
 .claude export-ignore
 .claude/** export-ignore
+.devin export-ignore
+.devin/** export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
 flake.lock export-ignore
