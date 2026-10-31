@@ -1,5 +1,7 @@
 # Code smell rules for this extension.
 target-version = "py310"
+# Do not change the vendored files.
+extend-exclude = [".claude"]
 
 [lint]
 # The strict rules are for the extension code. The tests have only the format check.

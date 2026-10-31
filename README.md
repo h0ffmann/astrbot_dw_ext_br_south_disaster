@@ -1,5 +1,7 @@
 # astrbot_dw_ext_br_south_disaster
 
+[English](README.md) | [简体中文](README.zh-CN.md) | [Português (Brasil)](README.pt-BR.md) | [日本語](README.ja-JP.md)
+
 This extension is for the AstrBot plugin [astrbot_plugin_disaster_warning](https://github.com/Pancakes-Labs/astrbot_plugin_disaster_warning).
 It sends CEMADEN rain, flood and landslide alerts for the South of Brazil (RS, SC and PR).
 It adds El Niño and La Niña data from NOAA CPC to the messages.
@@ -9,6 +11,10 @@ It adds El Niño and La Niña data from NOAA CPC to the messages.
 
 > [!CAUTION]
 > The extension runs as Python code in the same process as the host. When you install it, you trust it with the host and with the host data.
+
+## Documentation
+
+The [wiki](https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster/wiki) has more information in the same languages.
 
 ## Requirements
 
@@ -76,6 +82,16 @@ DW_HOST_DIR=/path/to/astrbot_plugin_disaster_warning pytest
 
 Set `DW_LIVE_TESTS=1` to run the live tests. They call the real CEMADEN and NOAA CPC services.
 
+## Writing rules
+
+Write the English text in ASD-STE100 Simplified Technical English. The vendored skill is in `.claude/skills/asd-ste100`.
+This command checks a file:
+
+```sh
+python3 .claude/skills/asd-ste100/scripts/ste-lint.py README.md
+```
+
 ## License
 
 The code is under the [Mozilla Public License 2.0](LICENSE). The file `extension.png` is under CC-BY-4.0. See `meta.json`.
+The files in `.claude/skills/asd-ste100` are under the MIT License. See `.claude/skills/asd-ste100/LICENSE`.

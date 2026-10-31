@@ -6,3 +6,4 @@ docs/ export-ignore
 .gitignore export-ignore
 pytest.ini export-ignore
 ruff.toml export-ignore
+.claude/ export-ignore
