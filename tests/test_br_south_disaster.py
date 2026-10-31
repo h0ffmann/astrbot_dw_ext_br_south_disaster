@@ -462,11 +462,7 @@ def test_meta_json_and_icon():
     meta = json.loads((EXT_DIR / "meta.json").read_text("utf-8"))
     assert meta["id"] == "br_south_disaster"
     assert meta["maintainer"]["github"] == "h0ffmann"
-    assert (
-        meta["maintainer"]["organization"]
-        == meta["organization"]["name"]
-        == "marola.dev"
-    )
+    assert meta["githubOrg"] == "marola-dev"
     assert set(meta["languages"]) == {
         p.stem for p in (EXT_DIR / "locale").glob("*.json")
     }
