@@ -105,7 +105,7 @@ def ext():
     )
     sys.modules["_ext_br_south_disaster_live"] = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(sys.modules["_ext_br_south_disaster_live"])
-    return importlib.import_module("_ext_br_south_disaster_live.extension")
+    return importlib.import_module("_ext_br_south_disaster_live.cemaden")
 
 
 @pytest.fixture(scope="module")

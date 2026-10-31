@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import ast
+import io
 import json
 import re
 import string
 import subprocess
 import sys
+import tarfile
 from datetime import datetime
 from pathlib import Path
 
@@ -163,6 +165,40 @@ def export_ignored(path: str) -> bool:
         check=True,
     )
     return result.stdout.strip().endswith(": set")
+
+
+def test_release_archive_has_only_runtime_entries():
+    """Build the archive of the last commit and read the top-level entries."""
+    result = subprocess.run(
+        ["git", "archive", "--worktree-attributes", "--format=tar", "HEAD"],
+        cwd=ROOT,
+        capture_output=True,
+        check=True,
+    )
+    with tarfile.open(fileobj=io.BytesIO(result.stdout)) as archive:
+        names = {name.split("/")[0] for name in archive.getnames()}
+    assert "extension.yaml" in names
+    assert not names & {
+        "tests",
+        "docs",
+        ".github",
+        ".claude",
+        ".gitignore",
+        ".gitattributes",
+        "justfile",
+        "pyproject.toml",
+    }
+
+
+def test_live_tests_use_names_that_exist():
+    """Check the live tests offline. The CI does not run them."""
+    source = (ROOT / "tests/live/test_br_south_disaster_live.py").read_text("utf-8")
+    assert '_live.cemaden")' in source
+    cemaden = (ROOT / "cemaden.py").read_text("utf-8")
+    names = set(re.findall(r"\bext\.([A-Za-z_]+)", source))
+    assert names
+    for name in names:
+        assert re.search(rf"^(def {name}\b|{name}\b)", cemaden, re.M), name
 
 
 @pytest.mark.parametrize("path", [p.name for p in MODULES] + REQUIRED[:-3])
