@@ -1,6 +1,7 @@
 """Fixtures for br_south_disaster: a fake ExtensionAPI built from the real host classes.
 
-The tests need a checkout of the host plugin. Set DW_HOST_DIR to the path of the checkout.
+The tests need a checkout of the host plugin. "just setup" makes one in .host/.
+Set DW_HOST_DIR to use a different checkout.
 """
 
 from __future__ import annotations
@@ -18,7 +19,7 @@ import pytest
 
 HOST_DIR = Path(
     os.environ.get("DW_HOST_DIR")
-    or Path(__file__).resolve().parents[2] / "astrbot_plugin_disaster_warning"
+    or Path(__file__).resolve().parents[1] / ".host/astrbot_plugin_disaster_warning"
 ).resolve()
 if not (HOST_DIR / "tests" / "conftest.py").is_file():
     pytest.exit(f"The host plugin is not at {HOST_DIR}. Set DW_HOST_DIR.", returncode=2)
@@ -90,7 +91,7 @@ def ext():
     )
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def make_api():
     """Return the FakeAPI class."""
     return FakeAPI

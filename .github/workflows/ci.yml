@@ -5,54 +5,50 @@ on:
     branches: [ main ]
   pull_request:
 
-env:
-  # The extension system is not yet in the main branch of the host. Change this when it is.
-  HOST_REPOSITORY: h0ffmann/astrbot_plugin_disaster_warning
-  HOST_REF: 2d2f2612dece0100170151e63ec3d9c04327055d
+permissions:
+  contents: read
 
 jobs:
   check:
-    name: Code smell and tests
+    name: just check
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: Check out the extension
         uses: actions/checkout@v7
         with:
           persist-credentials: false
 
-      - name: Check out the host
-        run: |
-          git init -q "$RUNNER_TEMP/astrbot_plugin_disaster_warning"
-          cd "$RUNNER_TEMP/astrbot_plugin_disaster_warning"
-          git fetch -q --depth 1 "https://github.com/$HOST_REPOSITORY.git" "$HOST_REF"
-          git checkout -q FETCH_HEAD
-
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
           python-version: '3.10'
 
-      - name: Install uv
-        run: pip install uv
+      - name: Install the tools
+        run: pip install uv rust-just
 
-      - name: Ruff format check
-        run: uvx ruff@0.14.2 format --check .
+      - name: Set up the environment
+        run: just setup
 
-      - name: Ruff strict rules
-        run: uvx ruff@0.14.2 check .
+      - name: Run all checks
+        run: just check
 
-      - name: Complexity (radon, fail on rank C or worse)
-        run: |
-          uvx radon@6.0.1 cc -s -a . -e 'tests/*,.claude/*'
-          if uvx radon@6.0.1 cc -n C . -e 'tests/*,.claude/*' | grep -q .; then
-            echo "A function has complexity rank C or worse."
-            exit 1
-          fi
+      - name: Make the release zip
+        run: just package
 
-      - name: Install the test requirements
-        run: pip install -r "$RUNNER_TEMP/astrbot_plugin_disaster_warning/requirements-dev.txt"
+  nix:
+    name: just check in the Nix shell
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the extension
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
-      - name: Run the tests
-        run: DW_HOST_DIR="$RUNNER_TEMP/astrbot_plugin_disaster_warning" pytest
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31.11.3
+
+      - name: Set up the environment
+        run: nix develop --command just setup
+
+      - name: Run all checks
+        run: nix develop --command just check

@@ -65,5 +65,5 @@ def _fmt_time(iso, fmt: str) -> str:
         return ""
     try:
         return datetime.fromisoformat(iso).strftime(fmt)
-    except ValueError:
+    except (TypeError, ValueError):
         return str(iso)

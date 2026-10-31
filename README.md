@@ -71,16 +71,19 @@ To add a state, add one line to `states.py`.
 
 The survey of the Brazilian sources is in [docs/brazil-sources-survey.md](docs/brazil-sources-survey.md).
 
-## Tests
+## Development
 
-The tests use the real classes of the host. Thus, they need a checkout of the host with the extension system.
-Set `DW_HOST_DIR` to the path of the checkout. If you do not set it, the tests look for `astrbot_plugin_disaster_warning` next to this repository.
+The tests use the real classes of the host. `just setup` gets a pinned copy of the host in `.host/`.
+You need [just](https://github.com/casey/just) and [uv](https://github.com/astral-sh/uv). With Nix, `nix develop` gives you these tools.
 
 ```sh
-DW_HOST_DIR=/path/to/astrbot_plugin_disaster_warning pytest
+just setup
+just check
 ```
 
-Set `DW_LIVE_TESTS=1` to run the live tests. They call the real CEMADEN and NOAA CPC services.
+`just check` runs the format, lint, type, complexity and test checks. The CI runs the same command.
+Run `just` to see all commands. `just live` runs the tests that call the real CEMADEN and NOAA CPC services.
+Set `DW_HOST_DIR` to use a different copy of the host.
 
 ## Writing rules
 
