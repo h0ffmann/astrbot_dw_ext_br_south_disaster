@@ -9,6 +9,7 @@ PRESENTER_KEY = f"{ID}_weather"
 
 
 def _envelope(api, event_id, metadata, when, raw):
+    """Build the host envelope of an alert or a rain event."""
     m = api.models
     hazard = metadata["hazard"]
     source_id = RAIN_SOURCE if hazard == "rain" else ALERTS_SOURCE
@@ -82,6 +83,7 @@ def build_rain_envelope(api, item: dict, day: str, enso: dict | None):
 
 
 def source_entry(api, source_id: str, kind: str, priority: int):
+    """Build the host catalog entry of a source. The kind selects the locale keys."""
     m = api.models
     return m.SourceEntry(
         source_id=source_id,

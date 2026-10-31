@@ -27,7 +27,7 @@
     },
     {
       "title": "Architecture",
-      "purpose": "Show how the modules work together: setup in extension.py registers the sources, the presenter and the pollers. Show the data flow from a feed to an event envelope. Use extension.py and extension.yaml."
+      "purpose": "Show how the modules work together: setup in extension.py registers the sources, the presenter and the pollers. Show the data flow from a feed to an event envelope. Use extension.py, pollers.py and extension.yaml."
     },
     {
       "title": "CEMADEN Feeds and Parsers",

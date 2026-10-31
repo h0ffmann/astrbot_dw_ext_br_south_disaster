@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Split the presenter and the pollers into small functions and classes. The messages do not change.
 - Add `just mock`, which makes a page with the real messages in a mock chat.
 - Add a code smell report on each pull request.
 - Add the DeepWiki settings in `.devin/wiki.json` and a badge in the README.
