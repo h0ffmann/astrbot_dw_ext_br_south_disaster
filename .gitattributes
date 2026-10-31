@@ -4,6 +4,8 @@ tests export-ignore
 tests/** export-ignore
 docs export-ignore
 docs/** export-ignore
+scripts export-ignore
+scripts/** export-ignore
 .github export-ignore
 .github/** export-ignore
 .claude export-ignore

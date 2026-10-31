@@ -2,6 +2,10 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md) | [Português (Brasil)](README.pt-BR.md) | [日本語](README.ja-JP.md)
 
+[![CI](https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster/actions/workflows/ci.yml/badge.svg)](https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster/actions/workflows/ci.yml)
+[![Code smell report](https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster/actions/workflows/code-smell-report.yml/badge.svg)](https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster/actions/workflows/code-smell-report.yml)
+[![License: MPL 2.0](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/h0ffmann/astrbot_dw_ext_br_south_disaster)
 
 > この文書は翻訳です。内容に差異がある場合は、[英語版](README.md)を正とします。
@@ -86,6 +90,7 @@ just check
 ```
 
 `just check` は、フォーマット、コード規則、型、複雑度、テストの確認を実行します。CI も同じコマンドを実行します。
+`just mock` は `dist/mock.html` を生成します。このファイルをブラウザで開くと、拡張機能の実際のメッセージを模擬チャットで確認できます。
 `just` を実行すると、すべてのコマンドを確認できます。`just live` は、実際の CEMADEN と NOAA CPC のサービスを呼び出すテストを実行します。
 別のホストのコピーを使うには、`DW_HOST_DIR` を設定します。
 

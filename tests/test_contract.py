@@ -44,6 +44,7 @@ DEV_ONLY = [
     ".github/workflows/ci.yml",
     ".claude/skills/asd-ste100/SKILL.md",
     ".devin/wiki.json",
+    "scripts/make_mock.py",
     "justfile",
     "flake.nix",
     "flake.lock",
@@ -182,6 +183,7 @@ def test_release_archive_has_only_runtime_entries():
     assert not names & {
         "tests",
         "docs",
+        "scripts",
         ".github",
         ".claude",
         ".devin",

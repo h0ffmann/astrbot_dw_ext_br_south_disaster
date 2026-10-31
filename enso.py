@@ -28,22 +28,29 @@ def classify(anom: float) -> tuple[str, str]:
     return "neutral", ""
 
 
+def _oni_row(line: str) -> dict | None:
+    """Return one row of oni.ascii.txt, or None for the header or a bad row."""
+    parts = line.split()
+    if len(parts) != ONI_COLUMNS:
+        return None
+    try:
+        year, anom = int(parts[1]), float(parts[3])
+    except ValueError:
+        return None
+    return (
+        {"season": parts[0], "year": year, "anom": anom}
+        if math.isfinite(anom)
+        else None
+    )
+
+
 def build_enso(text: str) -> dict | None:
     """Return the last row of oni.ascii.txt as an ENSO dict, or None."""
-    row: dict | None = None
-    for line in text.splitlines():
-        parts = line.split()
-        if len(parts) == ONI_COLUMNS:
-            try:
-                year, anom = int(parts[1]), float(parts[3])
-            except ValueError:
-                continue  # header line
-            if math.isfinite(anom):
-                row = {"season": parts[0], "year": year, "anom": anom}
-    if row is None:
+    rows = [row for row in map(_oni_row, text.splitlines()) if row]
+    if not rows:
         return None
-    phase, strength = classify(row["anom"])
-    return {**row, "phase": phase, "strength": strength}
+    phase, strength = classify(rows[-1]["anom"])
+    return {**rows[-1], "phase": phase, "strength": strength}
 
 
 class EnsoCache:
@@ -70,13 +77,17 @@ class EnsoCache:
         # request. A poll that the host stops keeps the short wait.
         self._fetched_at, self._max_age = now, RETRY_SECONDS
         try:
-            async with session.get(ONI_URL) as resp:
-                resp.raise_for_status()
-                parsed = build_enso(await resp.text())
-            if parsed:
-                self.value, self._max_age = parsed, CACHE_SECONDS
+            await self._download(session)
         # ENSO is optional background data. No failure here can stop an alert.
         except Exception as e:  # noqa: BLE001
             if self._logger:
                 self._logger.warning(f"The ONI request failed: {type(e).__name__}")
         return self.value
+
+    async def _download(self, session) -> None:
+        """Store the ONI data. A file with no usable row keeps the last value."""
+        async with session.get(ONI_URL) as resp:
+            resp.raise_for_status()
+            parsed = build_enso(await resp.text())
+        if parsed:
+            self.value, self._max_age = parsed, CACHE_SECONDS

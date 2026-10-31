@@ -170,16 +170,20 @@ def parse_rain(
     is more than MAX_AGE_DAYS older than the newest reading of the list.
     """
     rows = _rows(gauges)
-    items = [
+    items = (
         _gauge_item(g, thresholds)
         for g in rows
         if g.get("uf") == uf and _valid_id(g.get("codibge"))
-    ]
+    )
     newest = _newest_reading(rows)
+    active = [i for i in items if i and _recent(i["observed_at"], newest)]
+    return _worst_of_each_municipality(active)
+
+
+def _worst_of_each_municipality(items: list[dict]) -> list[dict]:
+    """Keep the item with the highest rank of each municipality."""
     worst: dict = {}
     for item in items:
-        if item is None or not _recent(item["observed_at"], newest):
-            continue
         code = item["codibge"]
         if code not in worst or item["rank"] > worst[code]["rank"]:
             worst[code] = item

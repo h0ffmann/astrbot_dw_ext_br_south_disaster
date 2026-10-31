@@ -62,8 +62,8 @@ types:
 
 # Fail on a function with complexity rank C or worse
 complexity:
-    {{python}} -m radon cc -s -a . -e '.venv/*,.host/*,tests/*,.claude/*'
-    ! {{python}} -m radon cc -n C . -e '.venv/*,.host/*,tests/*,.claude/*' | grep -q .
+    {{python}} -m radon cc -s -a . -e '.venv/*,.host/*,tests/*,scripts/*,.claude/*,dist/*'
+    ! {{python}} -m radon cc -n C . -e '.venv/*,.host/*,tests/*,scripts/*,.claude/*,dist/*' | grep -q .
 
 # Run all checks. The CI runs this command.
 check: lint types complexity cov
@@ -73,3 +73,9 @@ package:
     mkdir -p dist
     git archive --format=zip --prefix={{id}}/ -o dist/{{id}}.zip HEAD
     unzip -l dist/{{id}}.zip
+
+# Make dist/mock.html: a page with the real messages from the release zip in a mock chat
+mock *args: package
+    rm -rf dist/installed
+    unzip -q dist/{{id}}.zip -d dist/installed
+    {{python}} scripts/make_mock.py dist/installed dist/mock.html {{args}}

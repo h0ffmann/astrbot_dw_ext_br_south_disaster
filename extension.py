@@ -2,17 +2,13 @@
 
 The states are in states.py. To add a state, add one line there.
 The setting "states" selects some of the states. The default is all states.
-This module has the entry point and the pollers. See cemaden.py for the parsers.
+This module has the entry point. See pollers.py and cemaden.py for the other code.
 """
 
 from __future__ import annotations
 
-import json
-from datetime import datetime
-
 from .cemaden import (
     ALERTS_URL,
-    BRT,
     DEFAULT_THRESHOLDS,
     GAUGE_TIME_FMT,
     RAIN_URL,
@@ -30,6 +26,7 @@ from .envelopes import (
     build_rain_envelope,
     source_entry,
 )
+from .pollers import AlertPoller, FeedFormatError, RainPoller
 from .presenter import make_presenter
 from .settings import int_setting, load_thresholds
 from .states import STATES, selected_states
@@ -55,23 +52,6 @@ __all__ = [
 ]
 
 
-class FeedFormatError(Exception):
-    """A feed sent a JSON value of an unexpected type."""
-
-
-async def _get_json(session, url: str, expected: type):
-    """Return the JSON of url. Raise FeedFormatError for an unexpected top-level type.
-
-    The host logs the error. Thus, a changed feed does not look like an empty feed.
-    """
-    async with session.get(url) as resp:
-        resp.raise_for_status()
-        data = json.loads(await resp.text())  # The server sends JSON as text/html.
-    if not isinstance(data, expected):
-        raise FeedFormatError(url)
-    return data
-
-
 def _states(api, cfg: dict) -> tuple[str, ...]:
     """Return the selected states. Log a warning if the setting is not usable."""
     ufs = selected_states(cfg)
@@ -95,42 +75,21 @@ def setup(api) -> None:
     cfg = api.config or {}
     ufs = _states(api, cfg)
     enso = EnsoCache(api.logger)
-    alert_state, rain_state = AlertState(), RainState()
     thresholds = load_thresholds(cfg)
-
-    async def fetch_alerts(session):
-        alerts = parse_alerts(await _get_json(session, ALERTS_URL, dict), ufs)
-        alerts = [a for a in alerts if a["active"]]
-        if not alerts:
-            return []
-        # Get ENSO before the state changes. A timeout then does not lose an alert.
-        ctx = await enso.get(session)
-        alerts = alert_state.fresh(alerts)
-        return [build_alert_envelope(api, a, ctx) for a in alerts]
-
-    def rain_fetcher(uf: str):
-        async def fetch_rain(session):
-            gauges = await _get_json(session, RAIN_URL.format(uf=uf), list)
-            day = datetime.now(BRT).strftime("%Y%m%d")
-            items = parse_rain(gauges, thresholds, uf)
-            if not items:
-                return []
-            ctx = await enso.get(session)
-            items = rain_state.escalations(items, day)
-            return [build_rain_envelope(api, i, day, ctx) for i in items]
-
-        return fetch_rain
+    rain_state = RainState()
 
     api.register_presenter(PRESENTER_KEY, make_presenter(api))
     api.register_source(source_entry(api, ALERTS_SOURCE, "alerts", 2))
     api.register_source(source_entry(api, RAIN_SOURCE, "rain", 1))
     api.register_poller(
         ALERTS_SOURCE,
-        fetch_alerts,
+        AlertPoller(api, ufs, enso, AlertState()),
         interval_seconds=int_setting(api, cfg, "alerts_interval", 300),
     )
     rain_interval = int_setting(api, cfg, "rain_interval", 300)
     for uf in ufs:
         api.register_poller(
-            RAIN_SOURCE, rain_fetcher(uf), interval_seconds=rain_interval
+            RAIN_SOURCE,
+            RainPoller(api, uf, thresholds, enso, rain_state),
+            interval_seconds=rain_interval,
         )
