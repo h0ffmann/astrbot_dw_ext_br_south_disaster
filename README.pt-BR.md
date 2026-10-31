@@ -73,16 +73,19 @@ Para adicionar um estado, adicione uma linha a `states.py`.
 
 O levantamento das fontes brasileiras está em [docs/brazil-sources-survey.md](docs/brazil-sources-survey.md). Os documentos em `docs/` estão em inglês.
 
-## Testes
+## Desenvolvimento
 
-Os testes usam as classes reais do host. Por isso, os testes precisam de uma cópia local do host com o sistema de extensões.
-Defina `DW_HOST_DIR` com o caminho dessa cópia. Sem essa variável, os testes procuram `astrbot_plugin_disaster_warning` ao lado deste repositório.
+Os testes usam as classes reais do host. O comando `just setup` baixa uma cópia fixa do host em `.host/`.
+Você precisa de [just](https://github.com/casey/just) e [uv](https://github.com/astral-sh/uv). Com Nix, o comando `nix develop` fornece essas ferramentas.
 
 ```sh
-DW_HOST_DIR=/path/to/astrbot_plugin_disaster_warning pytest
+just setup
+just check
 ```
 
-Defina `DW_LIVE_TESTS=1` para executar os testes ao vivo. Esses testes consultam os serviços reais do CEMADEN e da NOAA CPC.
+O comando `just check` executa as verificações de formato, regras de código, tipos, complexidade e testes. A CI executa o mesmo comando.
+Execute `just` para ver todos os comandos. O comando `just live` executa os testes que consultam os serviços reais do CEMADEN e da NOAA CPC.
+Defina `DW_HOST_DIR` para usar outra cópia do host.
 
 ## Regras de escrita
 

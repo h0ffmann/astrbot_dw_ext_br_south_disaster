@@ -1,9 +1,17 @@
 # Keep the test data and the repository tools out of the release archives.
-tests/ export-ignore
-docs/ export-ignore
-.github/ export-ignore
+# The directory line removes the empty directory. The /** line is for check-attr.
+tests export-ignore
+tests/** export-ignore
+docs export-ignore
+docs/** export-ignore
+.github export-ignore
+.github/** export-ignore
+.claude export-ignore
+.claude/** export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
-pytest.ini export-ignore
-ruff.toml export-ignore
-.claude/ export-ignore
+flake.lock export-ignore
+flake.nix export-ignore
+justfile export-ignore
+pyproject.toml export-ignore
+requirements-dev.txt export-ignore

@@ -3,3 +3,8 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .venv/
+.host/
+dist/
+.coverage
+.hypothesis/
+.mypy_cache/

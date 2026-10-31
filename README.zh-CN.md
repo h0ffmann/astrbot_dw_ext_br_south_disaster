@@ -73,16 +73,19 @@
 
 巴西数据源调查见 [docs/brazil-sources-survey.md](docs/brazil-sources-survey.md)。`docs/` 中的文档为英文。
 
-## 测试
+## 开发
 
-测试使用宿主的真实类，因此需要一份带有扩展系统的宿主检出。
-请将 `DW_HOST_DIR` 设置为该检出的路径。如果未设置，测试会在本仓库旁查找 `astrbot_plugin_disaster_warning`。
+测试使用宿主的真实类。`just setup` 会在 `.host/` 中获取固定版本的宿主。
+您需要 [just](https://github.com/casey/just) 和 [uv](https://github.com/astral-sh/uv)。使用 Nix 时，`nix develop` 会提供这些工具。
 
 ```sh
-DW_HOST_DIR=/path/to/astrbot_plugin_disaster_warning pytest
+just setup
+just check
 ```
 
-设置 `DW_LIVE_TESTS=1` 可运行实时测试。这些测试会调用真实的 CEMADEN 和 NOAA CPC 服务。
+`just check` 运行格式、代码规则、类型、复杂度和测试检查。CI 运行相同的命令。
+运行 `just` 可查看所有命令。`just live` 运行调用真实 CEMADEN 和 NOAA CPC 服务的测试。
+设置 `DW_HOST_DIR` 可使用其他宿主副本。
 
 ## 写作规则
 

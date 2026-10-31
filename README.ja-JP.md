@@ -73,16 +73,19 @@
 
 ブラジルのデータソースの調査は [docs/brazil-sources-survey.md](docs/brazil-sources-survey.md) にあります。`docs/` の文書は英語です。
 
-## テスト
+## 開発
 
-テストはホストの実際のクラスを使用します。そのため、拡張システムを含むホストのチェックアウトが必要です。
-`DW_HOST_DIR` にチェックアウトのパスを設定してください。設定しない場合、テストはこのリポジトリの隣にある `astrbot_plugin_disaster_warning` を探します。
+テストはホストの実際のクラスを使用します。`just setup` は、固定バージョンのホストを `.host/` に取得します。
+[just](https://github.com/casey/just) と [uv](https://github.com/astral-sh/uv) が必要です。Nix を使う場合は、`nix develop` でこれらのツールを利用できます。
 
 ```sh
-DW_HOST_DIR=/path/to/astrbot_plugin_disaster_warning pytest
+just setup
+just check
 ```
 
-ライブテストを実行するには `DW_LIVE_TESTS=1` を設定します。ライブテストは実際の CEMADEN と NOAA CPC のサービスを呼び出します。
+`just check` は、フォーマット、コード規則、型、複雑度、テストの確認を実行します。CI も同じコマンドを実行します。
+`just` を実行すると、すべてのコマンドを確認できます。`just live` は、実際の CEMADEN と NOAA CPC のサービスを呼び出すテストを実行します。
+別のホストのコピーを使うには、`DW_HOST_DIR` を設定します。
 
 ## 記述ルール
 

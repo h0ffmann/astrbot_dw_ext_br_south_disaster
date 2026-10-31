@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import math
 import time
 
 ONI_URL = "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt"
 CACHE_SECONDS = 24 * 3600
+RETRY_SECONDS = 3600  # The wait after a failed or stopped request.
 # The lower limit of each strength class, in degrees Celsius of ONI anomaly.
 STRENGTH_FLOORS = (
     (2.0, "very_strong"),
@@ -28,18 +30,16 @@ def classify(anom: float) -> tuple[str, str]:
 
 def build_enso(text: str) -> dict | None:
     """Return the last row of oni.ascii.txt as an ENSO dict, or None."""
-    row = None
+    row: dict | None = None
     for line in text.splitlines():
         parts = line.split()
         if len(parts) == ONI_COLUMNS:
             try:
-                row = {
-                    "season": parts[0],
-                    "year": int(parts[1]),
-                    "anom": float(parts[3]),
-                }
+                year, anom = int(parts[1]), float(parts[3])
             except ValueError:
                 continue  # header line
+            if math.isfinite(anom):
+                row = {"season": parts[0], "year": year, "anom": anom}
     if row is None:
         return None
     phase, strength = classify(row["anom"])
@@ -47,28 +47,36 @@ def build_enso(text: str) -> dict | None:
 
 
 class EnsoCache:
-    """Get the ONI one time each 24 hours. If a request fails, keep the last value."""
+    """Get the ONI one time each 24 hours.
 
-    def __init__(self) -> None:
+    If a request fails, keep the last value and try again after RETRY_SECONDS.
+    """
+
+    def __init__(self, logger=None) -> None:
         self.value: dict | None = None
         self._fetched_at: float | None = None
+        self._max_age: float = CACHE_SECONDS
+        self._logger = logger
 
     async def get(self, session) -> dict | None:
         """Return the cached ENSO dict.
 
-        Download the ONI file again when the cache is older than 24 hours.
+        Download the ONI file again when the cache is too old.
         """
         now = time.monotonic()
-        if self._fetched_at is not None and now - self._fetched_at < CACHE_SECONDS:
+        if self._fetched_at is not None and now - self._fetched_at < self._max_age:
             return self.value
-        self._fetched_at = now  # This also limits the retries after a failure.
+        # Set this before the request. The other pollers do not start a second
+        # request. A poll that the host stops keeps the short wait.
+        self._fetched_at, self._max_age = now, RETRY_SECONDS
         try:
             async with session.get(ONI_URL) as resp:
                 resp.raise_for_status()
                 parsed = build_enso(await resp.text())
             if parsed:
-                self.value = parsed
+                self.value, self._max_age = parsed, CACHE_SECONDS
         # ENSO is optional background data. No failure here can stop an alert.
-        except Exception:  # noqa: BLE001
-            pass
+        except Exception as e:  # noqa: BLE001
+            if self._logger:
+                self._logger.warning(f"The ONI request failed: {type(e).__name__}")
         return self.value
