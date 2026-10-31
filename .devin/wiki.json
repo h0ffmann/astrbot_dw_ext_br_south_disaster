@@ -1,0 +1,60 @@
+{
+  "repo_notes": [
+    {
+      "content": "This repository is an extension for the AstrBot plugin astrbot_plugin_disaster_warning. The host plugin is in a different repository. The extension is not a standalone program. The repository root is the extension root, and the host calls setup(api) in extension.py."
+    },
+    {
+      "content": "The extension data is for reference only. It is not an official warning. Each page about alerts must keep this statement. Do not tell a reader to use this extension in place of the Defesa Civil or local authorities."
+    },
+    {
+      "content": "Time zones: the rain gauge field datahoraUltimovalor is in UTC, and the code changes it to Brasília time. The alert field atualizado is in UTC. The code treats datahoracriacao and ult_atualizacao as Brasília time, but the data does not prove this. Do not state that as a fact. See docs/CEMADEN API.md."
+    },
+    {
+      "content": "El Niño and La Niña data is background data. It is not the cause of an alert. Do not write that it causes an alert."
+    },
+    {
+      "content": "Do not document .claude/skills/asd-ste100. It is a vendored skill for contributors. It is not part of the extension. The .host directory is a local copy of the host and is not in the repository."
+    }
+  ],
+  "pages": [
+    {
+      "title": "Overview",
+      "purpose": "Explain what the extension does, the region and hazards that it covers, the host plugin that it needs, and the limits of the data. Use README.md and meta.json."
+    },
+    {
+      "title": "Installation and Configuration",
+      "purpose": "Document the manual installation, the rule that the directory name must be the same as the extension id, and each setting with its default. Use README.md and settings.py."
+    },
+    {
+      "title": "Architecture",
+      "purpose": "Show how the modules work together: setup in extension.py registers the sources, the presenter and the pollers. Show the data flow from a feed to an event envelope. Use extension.py and extension.yaml."
+    },
+    {
+      "title": "CEMADEN Feeds and Parsers",
+      "parent": "Architecture",
+      "purpose": "Document the alert and rain gauge feeds, the level mapping, the rule for an active alert, the rain thresholds and how parsers skip bad rows. Use cemaden.py and docs/CEMADEN API.md."
+    },
+    {
+      "title": "ENSO Background Data",
+      "parent": "Architecture",
+      "purpose": "Document the ONI file, the strength classes, the 24 hour cache and the retry after a failure. Use enso.py and docs/NOAA CPC ONI.md."
+    },
+    {
+      "title": "Duplicate Control and Envelopes",
+      "parent": "Architecture",
+      "purpose": "Document how AlertState and RainState stop repeated messages, and how the event ids and envelopes are made. Use tracking.py and envelopes.py."
+    },
+    {
+      "title": "Messages and Languages",
+      "purpose": "Document the message text, the locale files and the rule that zh-CN must have all keys. Use presenter.py and the locale directory."
+    },
+    {
+      "title": "Data Sources",
+      "purpose": "Describe the CEMADEN and NOAA CPC sources, and the survey of other Brazilian sources. Use meta.json, docs/CEMADEN API.md, docs/NOAA CPC ONI.md and docs/brazil-sources-survey.md."
+    },
+    {
+      "title": "Development and Testing",
+      "purpose": "Document the just commands, the Nix shell, the pinned host, the test files and the release zip. Use justfile, flake.nix, pyproject.toml and the tests directory."
+    }
+  ]
+}

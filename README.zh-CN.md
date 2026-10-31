@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md) | [Português (Brasil)](README.pt-BR.md) | [日本語](README.ja-JP.md)
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/h0ffmann/astrbot_dw_ext_br_south_disaster)
+
 > 本文为译文。如有出入，以[英文版](README.md)为准。
 
 本扩展用于 AstrBot 插件 [astrbot_plugin_disaster_warning](https://github.com/Pancakes-Labs/astrbot_plugin_disaster_warning)。

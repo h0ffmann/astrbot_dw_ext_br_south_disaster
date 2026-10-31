@@ -43,6 +43,7 @@ DEV_ONLY = [
     "docs/CEMADEN API.md",
     ".github/workflows/ci.yml",
     ".claude/skills/asd-ste100/SKILL.md",
+    ".devin/wiki.json",
     "justfile",
     "flake.nix",
     "flake.lock",
@@ -183,11 +184,25 @@ def test_release_archive_has_only_runtime_entries():
         "docs",
         ".github",
         ".claude",
+        ".devin",
         ".gitignore",
         ".gitattributes",
         "justfile",
         "pyproject.toml",
     }
+
+
+def test_deepwiki_settings_obey_the_limits():
+    """Check the limits of .devin/wiki.json in the DeepWiki documentation."""
+    wiki = json.loads((ROOT / ".devin/wiki.json").read_text("utf-8"))
+    pages, notes = wiki["pages"], wiki["repo_notes"]
+    titles = [page["title"] for page in pages]
+    assert 1 <= len(pages) <= 30
+    assert len(notes) <= 100
+    assert all(0 < len(note["content"]) <= 10_000 for note in notes)
+    assert all(titles) and len(titles) == len(set(titles))
+    assert all(page["purpose"] for page in pages)
+    assert {page.get("parent") for page in pages} - {None} <= set(titles)
 
 
 def test_live_tests_use_names_that_exist():

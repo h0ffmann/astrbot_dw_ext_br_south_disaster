@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md) | [Português (Brasil)](README.pt-BR.md) | [日本語](README.ja-JP.md)
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/h0ffmann/astrbot_dw_ext_br_south_disaster)
+
 This extension is for the AstrBot plugin [astrbot_plugin_disaster_warning](https://github.com/Pancakes-Labs/astrbot_plugin_disaster_warning).
 It sends CEMADEN rain, flood and landslide alerts for the South of Brazil (RS, SC and PR).
 It adds El Niño and La Niña data from NOAA CPC to the messages.
