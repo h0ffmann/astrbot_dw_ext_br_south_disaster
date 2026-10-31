@@ -2,6 +2,10 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md) | [Português (Brasil)](README.pt-BR.md) | [日本語](README.ja-JP.md)
 
+[![CI](https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster/actions/workflows/ci.yml/badge.svg)](https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster/actions/workflows/ci.yml)
+[![Code smell report](https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster/actions/workflows/code-smell-report.yml/badge.svg)](https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster/actions/workflows/code-smell-report.yml)
+[![License: MPL 2.0](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/h0ffmann/astrbot_dw_ext_br_south_disaster)
 
 > Este texto é uma tradução. Em caso de diferença, vale a [versão em inglês](README.md).
@@ -86,6 +90,7 @@ just check
 ```
 
 O comando `just check` executa as verificações de formato, regras de código, tipos, complexidade e testes. A CI executa o mesmo comando.
+O comando `just mock` gera `dist/mock.html`. Abra esse arquivo em um navegador para ver as mensagens reais da extensão em um chat simulado.
 Execute `just` para ver todos os comandos. O comando `just live` executa os testes que consultam os serviços reais do CEMADEN e da NOAA CPC.
 Defina `DW_HOST_DIR` para usar outra cópia do host.
 

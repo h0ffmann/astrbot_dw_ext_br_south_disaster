@@ -20,7 +20,7 @@ markers = ["live: calls the real CEMADEN and NOAA services. Set DW_LIVE_TESTS=1 
 [tool.coverage.run]
 branch = true
 source = ["."]
-omit = ["tests/*", ".claude/*", ".host/*", ".venv/*"]
+omit = ["tests/*", "scripts/*", "dist/*", ".claude/*", ".host/*", ".venv/*"]
 
 [tool.coverage.report]
 fail_under = 95
@@ -38,11 +38,11 @@ ignore_missing_imports = true
 [tool.ruff]
 target-version = "py310"
 # Do not change the vendored files.
-extend-exclude = [".claude", ".host"]
+extend-exclude = [".claude", ".host", "dist"]
 
 [tool.ruff.lint]
-# The strict rules are for the extension code. The tests have only the format check.
-exclude = ["tests/**"]
+# The strict rules are for the extension code. Other code has only the format check.
+exclude = ["tests/**", "scripts/**"]
 select = [
     "E", "F", "W",  # pycodestyle and pyflakes (the ruff defaults)
     "B",            # bugbear: likely bugs

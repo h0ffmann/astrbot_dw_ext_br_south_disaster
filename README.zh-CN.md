@@ -2,6 +2,10 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md) | [Português (Brasil)](README.pt-BR.md) | [日本語](README.ja-JP.md)
 
+[![CI](https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster/actions/workflows/ci.yml/badge.svg)](https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster/actions/workflows/ci.yml)
+[![Code smell report](https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster/actions/workflows/code-smell-report.yml/badge.svg)](https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster/actions/workflows/code-smell-report.yml)
+[![License: MPL 2.0](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/h0ffmann/astrbot_dw_ext_br_south_disaster)
 
 > 本文为译文。如有出入，以[英文版](README.md)为准。
@@ -86,6 +90,7 @@ just check
 ```
 
 `just check` 运行格式、代码规则、类型、复杂度和测试检查。CI 运行相同的命令。
+`just mock` 生成 `dist/mock.html`。在浏览器中打开此文件，可在模拟聊天中查看扩展的真实消息。
 运行 `just` 可查看所有命令。`just live` 运行调用真实 CEMADEN 和 NOAA CPC 服务的测试。
 设置 `DW_HOST_DIR` 可使用其他宿主副本。
 
