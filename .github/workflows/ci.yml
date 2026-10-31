@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+env:
+  # The extension system is not yet in the main branch of the host. Change this when it is.
+  HOST_REPOSITORY: h0ffmann/astrbot_plugin_disaster_warning
+  HOST_REF: 2d2f2612dece0100170151e63ec3d9c04327055d
+
+jobs:
+  check:
+    name: Code smell and tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the extension
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Check out the host
+        run: |
+          git init -q "$RUNNER_TEMP/astrbot_plugin_disaster_warning"
+          cd "$RUNNER_TEMP/astrbot_plugin_disaster_warning"
+          git fetch -q --depth 1 "https://github.com/$HOST_REPOSITORY.git" "$HOST_REF"
+          git checkout -q FETCH_HEAD
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Ruff format check
+        run: uvx ruff@0.14.2 format --check .
+
+      - name: Ruff strict rules
+        run: uvx ruff@0.14.2 check .
+
+      - name: Complexity (radon, fail on rank C or worse)
+        run: |
+          uvx radon@6.0.1 cc -s -a . -e 'tests/*'
+          if uvx radon@6.0.1 cc -n C . -e 'tests/*' | grep -q .; then
+            echo "A function has complexity rank C or worse."
+            exit 1
+          fi
+
+      - name: Install the test requirements
+        run: pip install -r "$RUNNER_TEMP/astrbot_plugin_disaster_warning/requirements-dev.txt"
+
+      - name: Run the tests
+        run: DW_HOST_DIR="$RUNNER_TEMP/astrbot_plugin_disaster_warning" pytest
