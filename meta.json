@@ -7,10 +7,7 @@
     "location": "Florianópolis, SC, Brazil",
     "organization": "marola.dev"
   },
-  "organization": {
-    "name": "marola.dev",
-    "roadmap": "CZ/JPN support soon."
-  },
+  "githubOrg": "marola-dev",
   "coverage": {
     "country": "BR",
     "states": [
