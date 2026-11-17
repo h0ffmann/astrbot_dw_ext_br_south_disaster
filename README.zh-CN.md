@@ -96,14 +96,14 @@ just check
 
 ## 写作规则
 
-英文文本须使用 ASD-STE100 简化技术英语。随仓库提供的技能位于 `.claude/skills/asd-ste100`。
+英文文本须使用 ASD-STE100 简化技术英语。随仓库提供的技能位于 `.agents/skills/asd-ste100`。
 以下命令可检查文件：
 
 ```sh
-python3 .claude/skills/asd-ste100/scripts/ste-lint.py README.md
+python3 .agents/skills/asd-ste100/scripts/ste-lint.py README.md
 ```
 
 ## 许可证
 
 代码采用 [Mozilla Public License 2.0](LICENSE)。文件 `extension.png` 采用 CC-BY-4.0，详见 `meta.json`。
-`.claude/skills/asd-ste100` 中的文件采用 MIT 许可证，详见 `.claude/skills/asd-ste100/LICENSE`。
+`.agents/skills/asd-ste100` 中的文件采用 MIT 许可证，详见 `.agents/skills/asd-ste100/LICENSE`。

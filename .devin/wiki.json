@@ -13,7 +13,7 @@
       "content": "El Niño and La Niña data is background data. It is not the cause of an alert. Do not write that it causes an alert."
     },
     {
-      "content": "Do not document .claude/skills/asd-ste100. It is a vendored skill for contributors. It is not part of the extension. The .host directory is a local copy of the host and is not in the repository."
+      "content": "Do not document .agents/skills/asd-ste100. It is a vendored skill for contributors. It is not part of the extension. The .host directory is a local copy of the host and is not in the repository."
     }
   ],
   "pages": [

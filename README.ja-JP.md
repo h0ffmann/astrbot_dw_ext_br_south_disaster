@@ -96,14 +96,14 @@ just check
 
 ## 記述ルール
 
-英語の文章は ASD-STE100 Simplified Technical English で記述してください。同梱のスキルは `.claude/skills/asd-ste100` にあります。
+英語の文章は ASD-STE100 Simplified Technical English で記述してください。同梱のスキルは `.agents/skills/asd-ste100` にあります。
 次のコマンドでファイルを確認できます。
 
 ```sh
-python3 .claude/skills/asd-ste100/scripts/ste-lint.py README.md
+python3 .agents/skills/asd-ste100/scripts/ste-lint.py README.md
 ```
 
 ## ライセンス
 
 コードは [Mozilla Public License 2.0](LICENSE) の下で提供されます。`extension.png` は CC-BY-4.0 です。`meta.json` を参照してください。
-`.claude/skills/asd-ste100` のファイルは MIT ライセンスです。`.claude/skills/asd-ste100/LICENSE` を参照してください。
+`.agents/skills/asd-ste100` のファイルは MIT ライセンスです。`.agents/skills/asd-ste100/LICENSE` を参照してください。

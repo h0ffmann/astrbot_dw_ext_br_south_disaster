@@ -8,8 +8,8 @@ scripts export-ignore
 scripts/** export-ignore
 .github export-ignore
 .github/** export-ignore
-.claude export-ignore
-.claude/** export-ignore
+.agents export-ignore
+.agents/** export-ignore
 .devin export-ignore
 .devin/** export-ignore
 .gitattributes export-ignore
