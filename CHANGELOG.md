@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- The extension icon is new artwork for this repository. `meta.json` no longer names an organization.
 - Split the presenter and the pollers into small functions and classes. The messages do not change.
 - Add `just mock`, which makes a page with the real messages in a mock chat.
 - Add a code smell report on each pull request.
