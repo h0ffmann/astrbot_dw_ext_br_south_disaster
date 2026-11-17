@@ -96,14 +96,14 @@ Defina `DW_HOST_DIR` para usar outra cópia do host.
 
 ## Regras de escrita
 
-Escreva o texto em inglês em ASD-STE100 Simplified Technical English. A skill incluída neste repositório está em `.claude/skills/asd-ste100`.
+Escreva o texto em inglês em ASD-STE100 Simplified Technical English. A skill incluída neste repositório está em `.agents/skills/asd-ste100`.
 Este comando verifica um arquivo:
 
 ```sh
-python3 .claude/skills/asd-ste100/scripts/ste-lint.py README.md
+python3 .agents/skills/asd-ste100/scripts/ste-lint.py README.md
 ```
 
 ## Licença
 
 O código está sob a [Mozilla Public License 2.0](LICENSE). O arquivo `extension.png` está sob CC-BY-4.0. Consulte `meta.json`.
-Os arquivos em `.claude/skills/asd-ste100` estão sob a licença MIT. Consulte `.claude/skills/asd-ste100/LICENSE`.
+Os arquivos em `.agents/skills/asd-ste100` estão sob a licença MIT. Consulte `.agents/skills/asd-ste100/LICENSE`.

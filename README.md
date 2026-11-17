@@ -94,14 +94,14 @@ Set `DW_HOST_DIR` to use a different copy of the host.
 
 ## Writing rules
 
-Write the English text in ASD-STE100 Simplified Technical English. The vendored skill is in `.claude/skills/asd-ste100`.
+Write the English text in ASD-STE100 Simplified Technical English. The vendored skill is in `.agents/skills/asd-ste100`.
 This command checks a file:
 
 ```sh
-python3 .claude/skills/asd-ste100/scripts/ste-lint.py README.md
+python3 .agents/skills/asd-ste100/scripts/ste-lint.py README.md
 ```
 
 ## License
 
 The code is under the [Mozilla Public License 2.0](LICENSE). The file `extension.png` is under CC-BY-4.0. See `meta.json`.
-The files in `.claude/skills/asd-ste100` are under the MIT License. See `.claude/skills/asd-ste100/LICENSE`.
+The files in `.agents/skills/asd-ste100` are under the MIT License. See `.agents/skills/asd-ste100/LICENSE`.

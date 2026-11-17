@@ -62,8 +62,8 @@ types:
 
 # Fail on a function with complexity rank C or worse
 complexity:
-    {{python}} -m radon cc -s -a . -e '.venv/*,.host/*,tests/*,scripts/*,.claude/*,dist/*'
-    ! {{python}} -m radon cc -n C . -e '.venv/*,.host/*,tests/*,scripts/*,.claude/*,dist/*' | grep -q .
+    {{python}} -m radon cc -s -a . -e '.venv/*,.host/*,tests/*,scripts/*,.agents/*,dist/*'
+    ! {{python}} -m radon cc -n C . -e '.venv/*,.host/*,tests/*,scripts/*,.agents/*,dist/*' | grep -q .
 
 # Run all checks. The CI runs this command.
 check: lint types complexity cov
