@@ -4,10 +4,8 @@
   "maintainer": {
     "github": "h0ffmann",
     "url": "https://github.com/h0ffmann",
-    "location": "Florianópolis, SC, Brazil",
-    "organization": "marola.dev"
+    "location": "Florianópolis, SC, Brazil"
   },
-  "githubOrg": "marola-dev",
   "coverage": {
     "country": "BR",
     "states": [
@@ -51,11 +49,10 @@
   ],
   "icon": {
     "file": "extension.png",
-    "title": "marola logo v2",
-    "source": "https://github.com/marola-dev/marola/blob/a4c2af1b106a/docs/assets/logo-v2/marola-logo-v2.png",
-    "author": "marola-dev",
+    "title": "rain cloud and flood waves",
+    "source": "https://github.com/h0ffmann/astrbot_dw_ext_br_south_disaster",
+    "author": "h0ffmann",
     "license": "CC-BY-4.0",
-    "license_url": "https://creativecommons.org/licenses/by/4.0/",
-    "changes": "None. The file is a copy of the source file."
+    "license_url": "https://creativecommons.org/licenses/by/4.0/"
   }
 }
